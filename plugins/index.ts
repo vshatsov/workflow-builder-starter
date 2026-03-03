@@ -13,9 +13,10 @@
  * 1. Delete the plugin directory
  * 2. Run: pnpm discover-plugins (or it runs automatically on build)
  *
- * Discovered plugins: reverse, shout
+ * Discovered plugins: resend, reverse, shout
  */
 
+import "./resend";
 import "./reverse";
 import "./shout";
 

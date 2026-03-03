@@ -7,7 +7,7 @@
  * Contains auto-generated codegen templates for steps with stepHandler.
  * These templates are used when exporting workflows to standalone projects.
  *
- * Generated templates: 2
+ * Generated templates: 3
  */
 
 /**
@@ -15,6 +15,55 @@
  * Maps action IDs to their generated export code templates
  */
 export const AUTO_GENERATED_TEMPLATES: Record<string, string> = {
+  "resend/send-email": `import { Resend } from "resend";
+import { fetchCredentials } from "./lib/credential-helper";
+
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  return String(error);
+}
+
+type SendEmailResult =
+  | { success: true; id: string }
+  | { success: false; error: string };
+
+export type SendEmailCoreInput = {
+  emailTo: string;
+  emailSubject: string;
+  emailBody: string;
+};
+
+export async function sendEmailStep(
+  input: SendEmailCoreInput,
+): Promise<SendEmailResult> {
+  "use step";
+  const credentials = await fetchCredentials("resend");
+  const apiKey = credentials.RESEND_API_KEY;
+
+  if (!apiKey) {
+    return {
+      success: false,
+      error: "RESEND_API_KEY is not configured.",
+    };
+  }
+
+  const resend = new Resend(apiKey);
+
+  const result = await resend.emails.send({
+    from: "onboarding@resend.dev", // Resend's test sender
+    to: input.emailTo,
+    subject: input.emailSubject,
+    text: input.emailBody,
+  });
+
+  if (result.error) {
+    return { success: false, error: result.error.message };
+  }
+
+  return { success: true, id: result.data?.id || "" };
+}
+`,
+
   "reverse/Reverse": `import { fetchCredentials } from "./lib/credential-helper";
 
 function getErrorMessage(error: unknown): string {

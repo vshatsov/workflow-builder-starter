@@ -9,12 +9,13 @@
  * 2. Add a system integration to SYSTEM_INTEGRATION_TYPES in discover-plugins.ts
  * 3. Run: pnpm discover-plugins
  *
- * Generated types: database, reverse, shout
+ * Generated types: database, resend, reverse, shout
  */
 
 // Integration type union - plugins + system integrations
 export type IntegrationType =
   | "database"
+  | "resend"
   | "reverse"
   | "shout";
 
