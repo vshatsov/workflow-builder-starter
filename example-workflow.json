@@ -1,0 +1,48 @@
+{
+  "nodes": [
+    {
+      "id": "trigger-1",
+      "type": "trigger",
+      "position": {
+        "x": 100,
+        "y": 200
+      },
+      "data": {
+        "label": "Manual Trigger",
+        "description": "Click 'Run' to execute the workflow",
+        "type": "trigger",
+        "config": {
+          "triggerType": "Manual"
+        },
+        "status": "idle"
+      }
+    },
+    {
+      "id": "action-1",
+      "type": "action",
+      "position": {
+        "x": 400,
+        "y": 200
+      },
+      "data": {
+        "label": "Hello World",
+        "description": "Log a message to the console",
+        "type": "action",
+        "config": {
+          "actionType": "Log",
+          "logMessage": "👋 Hello from Vercel Workflow!",
+          "logLevel": "info"
+        },
+        "status": "idle"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-1",
+      "source": "trigger-1",
+      "target": "action-1",
+      "type": "default"
+    }
+  ]
+}
