@@ -7,7 +7,7 @@
  * Contains auto-generated codegen templates for steps with stepHandler.
  * These templates are used when exporting workflows to standalone projects.
  *
- * Generated templates: 1
+ * Generated templates: 2
  */
 
 /**
@@ -15,6 +15,30 @@
  * Maps action IDs to their generated export code templates
  */
 export const AUTO_GENERATED_TEMPLATES: Record<string, string> = {
+  "reverse/Reverse": `import { fetchCredentials } from "./lib/credential-helper";
+
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  return String(error);
+}
+
+type ReverseResult =
+  | { success: true; reversed: string }
+  | { success: false; error: string };
+
+export async function reverseStep(input: ReverseInput): Promise<ReverseResult> {
+  "use step";
+  const credentials = await fetchCredentials("reverse");
+  if (typeof input.message !== "string" || !input.message.trim()) {
+    return { success: false, error: "Message must be a non-empty string" };
+  }
+
+  const reversed = Array.from(input.message).reverse().join("");
+  console.log(reversed);
+  return { success: true, reversed };
+}
+`,
+
   "shout/shout": `import { fetchCredentials } from "./lib/credential-helper";
 
 function getErrorMessage(error: unknown): string {

@@ -7,7 +7,7 @@
  * This registry enables dynamic step imports that are statically analyzable
  * by the bundler. Each action type maps to its step importer function.
  *
- * Generated entries: 1
+ * Generated entries: 2
  */
 
 import "server-only";
@@ -29,6 +29,10 @@ export type StepImporter = {
  * These imports are statically analyzable by the bundler
  */
 export const PLUGIN_STEP_IMPORTERS: Record<string, StepImporter> = {
+  "reverse/Reverse": {
+    importer: () => import("@/plugins/reverse/steps/reverse"),
+    stepFunction: "reverseStep",
+  },
   "shout/shout": {
     importer: () => import("@/plugins/shout/steps/shout"),
     stepFunction: "shoutStep",
@@ -40,6 +44,7 @@ export const PLUGIN_STEP_IMPORTERS: Record<string, StepImporter> = {
  * Used for displaying friendly names in the UI (e.g., Runs tab)
  */
 export const ACTION_LABELS: Record<string, string> = {
+  "reverse/Reverse": "Reverse Message",
   "shout/shout": "Shout Message",
 
 };

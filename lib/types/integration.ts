@@ -9,12 +9,13 @@
  * 2. Add a system integration to SYSTEM_INTEGRATION_TYPES in discover-plugins.ts
  * 3. Run: pnpm discover-plugins
  *
- * Generated types: database, shout
+ * Generated types: database, reverse, shout
  */
 
 // Integration type union - plugins + system integrations
 export type IntegrationType =
   | "database"
+  | "reverse"
   | "shout";
 
 // Generic config type - plugins define their own keys via formFields[].configKey
