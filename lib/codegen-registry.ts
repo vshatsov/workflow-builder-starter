@@ -15,73 +15,27 @@
  * Maps action IDs to their generated export code templates
  */
 export const AUTO_GENERATED_TEMPLATES: Record<string, string> = {
-  "test-plugin/test-action": `import { FatalError, RetryableError } from "workflow";
-import { fetchCredentials } from "./lib/credential-helper";
+  "shout/shout": `import { fetchCredentials } from "./lib/credential-helper";
 
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error) return error.message;
   return String(error);
 }
 
-// TODO: Customize result fields for your action
-type TestActionResult =
-  | { success: true; resultId: string }
+type ShoutResult =
+  | { success: true; shouted: string }
   | { success: false; error: string };
 
-// Core input fields
-export type TestActionCoreInput = {
-  fieldA: string;
-  fieldB?: string;
-};
-
-export async function testActionStep(
-  input: TestActionCoreInput,
-): Promise<TestActionResult> {
+export async function shoutStep(input: ShoutInput): Promise<ShoutResult> {
   "use step";
-  const credentials = await fetchCredentials("test-plugin");
-  const apiKey = credentials.TEST_PLUGIN_API_KEY;
-
-  // Missing credentials = permanent failure, don't retry
-  if (!apiKey) {
-    throw new FatalError(
-      "TEST_PLUGIN_API_KEY is not configured. Add it to .env.local or Project Integrations.",
-    );
+  const credentials = await fetchCredentials("shout");
+  if (typeof input.message !== "string" || !input.message.trim()) {
+    return { success: false, error: "Message must be a non-empty string" };
   }
 
-  // Your API call or business logic here
-  const response = await fetch("https://api.test-plugin.com/endpoint", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: \`Bearer \${apiKey}\`,
-    },
-    body: JSON.stringify({
-      fieldA: input.fieldA,
-      fieldB: input.fieldB,
-    }),
-  });
-
-  // Handle errors by type
-  if (!response.ok) {
-    const status = response.status;
-    const message = \`API request failed: \${response.statusText}\`;
-
-    // Auth errors = permanent, don't retry
-    if (status === 401 || status === 403) {
-      throw new FatalError(message);
-    }
-
-    // Rate limits and server errors = transient, retry with backoff
-    if (status === 429 || status >= 500) {
-      throw new RetryableError(message);
-    }
-
-    // Other client errors (400, 404, etc.) = permanent
-    throw new FatalError(message);
-  }
-
-  const result = await response.json();
-  return { success: true, resultId: result.id };
+  const shouted = input.message.toUpperCase();
+  console.log(shouted);
+  return { success: true, shouted };
 }
 `,
 };
