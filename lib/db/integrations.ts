@@ -153,6 +153,7 @@ export async function getIntegration(
 
   return {
     ...result[0],
+    type: result[0].type as string,
     config: decryptConfig(result[0].config as string) as IntegrationConfig,
   };
 }
